@@ -166,8 +166,8 @@ def extruct_links(driver):
     return links
 
 
-def extruct_data_impl(session_queue, url):
-    driver = session_queue.get()
+def extruct_data_impl(sess_queue, url):
+    driver = sess_queue.get()
     driver.get(target_url + url)
     data = {}
     scrolldown(driver, 10)
@@ -220,12 +220,12 @@ def extruct_data_impl(session_queue, url):
     except:
         pass
     finally:
-        session_queue.put(driver)
+        sess_queue.put(driver)
 
 
-def extruct_data(urls, num_session, session_queue):
+def extruct_data(urls, num_session, sess_queue):
     with ThreadPoolExecutor(max_workers=num_session) as executor:
-        executor.map(lambda url: extruct_data_impl(session_queue, url), urls)
+        executor.map(lambda url: extruct_data_impl(sess_queue, url), urls)
 
 
 main_driver = driver_init()
